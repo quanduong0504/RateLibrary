@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">RateLib</string>
+    <string name="maybe_later">Maybe Later</string>
+    <string name="submit">Submit</string>
+    <string name="please_leave_a_feedback_to_help_us_improve_product">Please leave a feedback to help us improve product</string>
+    <string name="do_you_like_our_app">DO YOU LIKE OUR APP ?</string>
+    <string name="give_us_a_quick_rating_so_we_know_if_you_like_it">Give us a quick rating so we know if you like it?</string>
+</resources>

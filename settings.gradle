@@ -1,0 +1,3 @@
+include ':RateUsLib'
+include ':app'
+rootProject.name = "RateLibary"
