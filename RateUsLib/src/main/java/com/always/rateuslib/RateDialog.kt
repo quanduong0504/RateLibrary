@@ -14,15 +14,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import com.iarcuschin.simpleratingbar.BuildConfig.APPLICATION_ID
 import kotlinx.android.synthetic.main.dialog_rate.view.*
 
-class RateDialog  {
+class RateDialog(private val context: Context)  {
     private lateinit var alertDialogBuilder: AlertDialog.Builder
     private lateinit var rateDialog: AlertDialog
-    private lateinit var context: Context
-    private lateinit var basePref: BasePreference
+    private var basePref: BasePreference = BasePreference.Cache(context).builder()
 
     private var isHandleClose = false
     private var onCloseDialog: () -> Unit = {}
@@ -38,9 +35,7 @@ class RateDialog  {
         return this
     }
 
-    fun create(context: Context, applicationId: String) : RateDialog {
-        this.context = context
-        basePref = BasePreference.Cache(context).builder()
+    fun create(applicationId: String) : RateDialog {
         if(isShowRate()) {
             alertDialogBuilder = AlertDialog.Builder(context, R.style.DialogThemeCustome)
             val rateInflater = LayoutInflater.from(context).inflate(R.layout.dialog_rate, null)
