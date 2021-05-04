@@ -1,8 +1,10 @@
 package com.always.rateuslib
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Point
+import android.net.Uri
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +12,10 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import com.iarcuschin.simpleratingbar.BuildConfig.APPLICATION_ID
 import kotlinx.android.synthetic.main.dialog_rate.view.*
 
 class RateDialog  {
@@ -19,10 +24,24 @@ class RateDialog  {
     private lateinit var context: Context
     private lateinit var basePref: BasePreference
 
-    fun create(context: Context, rateLink: String) : RateDialog {
+    private var isHandleClose = false
+    private var onCloseDialog: () -> Unit = {}
+
+    fun setOnCloseDialogListener(onCloseDialog: () -> Unit) : RateDialog {
+        this.onCloseDialog = onCloseDialog
+        this.isHandleClose = true
+        return this
+    }
+
+    fun setupNumbersTimesShowRate(vararg numbers: Int) : RateDialog {
+        ShowRateCountManager.setup(numbers.toMutableList())
+        return this
+    }
+
+    fun create(context: Context, applicationId: String) : RateDialog {
         this.context = context
         basePref = BasePreference.Cache(context).builder()
-        if(check()) {
+        if(isShowRate()) {
             alertDialogBuilder = AlertDialog.Builder(context, R.style.DialogThemeCustome)
             val rateInflater = LayoutInflater.from(context).inflate(R.layout.dialog_rate, null)
             alertDialogBuilder.setView(rateInflater)
@@ -53,10 +72,19 @@ class RateDialog  {
                 if(ratingView.rating <= 3) {
                     if(edtFeedBack.text.toString().trim().isBlank()) {
                         Toast.makeText(context, "Not empty text", Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(context, "Thank you for your feedback!", Toast.LENGTH_LONG).show()
+                        if(isHandleClose) {
+                            onCloseDialog.invoke()
+                        } else {
+                            if(context is AppCompatActivity) {
+                                context.finishAffinity()
+                            }
+                        }
                     }
                 } else {
                     rateDialog.dismiss()
-                    openStoreLink(rateLink)
+                    openStoreLink(applicationId)
                 }
             }
         }
@@ -64,12 +92,18 @@ class RateDialog  {
         return this
     }
 
-    private fun openStoreLink(link: String) {
-
+    private fun openStoreLink(applicationId: String) {
+        kotlin.runCatching {
+            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$applicationId")))
+        }.onFailure {
+            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$applicationId")))
+        }
     }
 
-    fun check() : Boolean {
-        return basePref.countShowRate % 2 == 0
+    fun getCount() = basePref.countShowRate
+
+    fun isShowRate() : Boolean {
+        return ShowRateCountManager.check(basePref.countShowRate)
     }
 
     fun setCancelable(isCancelAble: Boolean) {
@@ -88,17 +122,12 @@ class RateDialog  {
     fun show() {
         if(this::rateDialog.isInitialized && !rateDialog.isShowing) {
             rateDialog.show()
-            plusCount()
-
+            basePref.plusCount()
             val window = rateDialog.window
             val params = window?.attributes
             params?.width = getScreenWidth() - context.resources.getDimension(R.dimen._32sdp).toInt()
             window?.attributes = params
         }
-    }
-
-    private fun plusCount() {
-        basePref.countShowRate = ++basePref.countShowRate
     }
 
     private fun getScreenWidth(): Int {

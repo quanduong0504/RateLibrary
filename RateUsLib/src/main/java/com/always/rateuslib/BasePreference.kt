@@ -14,6 +14,10 @@ class BasePreference(private val cache: Cache) {
         cache.prefsEditor.putInt(CACHE_SHOW_RATE, value)
     }
 
+    fun plusCount() {
+        countShowRate = ++countShowRate
+    }
+
     class Cache(private val context: Context) {
         val appSharedPrefs: SharedPreferences by lazy {
             context.getSharedPreferences(
