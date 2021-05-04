@@ -61,10 +61,12 @@ class RateDialog  {
                     rateInflater.btnSubmit.setBackgroundColor(Color.parseColor("#E57373"))
                     rateInflater.btnSubmit.setTextColor(Color.WHITE)
                 } else { // Goto Play Store
-                    edtFeedBack.visibility = View.GONE
-                    rateInflater.btnSubmit.text = context.getString(R.string.maybe_later)
-                    rateInflater.btnSubmit.setTextColor(Color.parseColor("#757575"))
-                    rateInflater.btnSubmit.setBackgroundColor(Color.parseColor("#EEEEEE"))
+//                    edtFeedBack.visibility = View.GONE
+//                    rateInflater.btnSubmit.text = context.getString(R.string.maybe_later)
+//                    rateInflater.btnSubmit.setTextColor(Color.parseColor("#757575"))
+//                    rateInflater.btnSubmit.setBackgroundColor(Color.parseColor("#EEEEEE"))
+                    rateDialog.dismiss()
+                    openStoreLink(applicationId)
                 }
             }
 
@@ -83,8 +85,9 @@ class RateDialog  {
                         }
                     }
                 } else {
-                    rateDialog.dismiss()
-                    openStoreLink(applicationId)
+                    if(context is AppCompatActivity) {
+                        context.finishAffinity()
+                    }
                 }
             }
         }
