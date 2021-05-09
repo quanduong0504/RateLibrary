@@ -2,6 +2,7 @@ package com.always.rateuslib
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.Point
 import android.net.Uri
@@ -16,10 +17,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.dialog_rate.view.*
 
-class RateDialog(private val context: Context)  {
+class RateDialog(private val context: Context, private val sharedPreferences: SharedPreferences)  {
     private lateinit var alertDialogBuilder: AlertDialog.Builder
     private lateinit var rateDialog: AlertDialog
-    private var basePref: BasePreference = BasePreference.Cache(context).builder()
+    private val basePref: BasePreference = BasePreference.Cache(sharedPreferences).builder()
 
     private var isHandleClose = false
     private var onCloseDialog: () -> Unit = {}
