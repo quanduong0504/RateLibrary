@@ -17,10 +17,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.dialog_rate.view.*
 
-class RateDialog(private val context: Context, private val sharedPreferences: SharedPreferences)  {
+class RateDialog(private val context: Context)  {
     private lateinit var alertDialogBuilder: AlertDialog.Builder
     private lateinit var rateDialog: AlertDialog
-    private val basePref: BasePreference = BasePreference.Cache(sharedPreferences).builder()
+    private val basePref: BasePreference = BasePreference.Cache(context).builder()
 
     private var isHandleClose = false
     private var onCloseDialog: () -> Unit = {}
