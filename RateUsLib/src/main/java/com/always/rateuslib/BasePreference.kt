@@ -12,13 +12,13 @@ class BasePreference(private val cache: Cache) {
     var countShowRate: Int
     get() = cache.appSharedPrefs.getInt(CACHE_SHOW_RATE, 0)
     set(value) {
-        cache.prefsEditor.putInt(CACHE_SHOW_RATE, value)
+        cache.putInt(CACHE_SHOW_RATE, value)
     }
 
     var isRate: Boolean
     get() = cache.appSharedPrefs.getBoolean(CACHE_IS_RATE, false)
     set(value) {
-        cache.prefsEditor.putBoolean(CACHE_IS_RATE, value)
+        cache.putBoolean(CACHE_IS_RATE, value)
     }
 
     fun plusCount() {
@@ -33,8 +33,16 @@ class BasePreference(private val cache: Cache) {
             )
         }
 
-        val prefsEditor: SharedPreferences.Editor by lazy {
+        private val prefsEditor: SharedPreferences.Editor by lazy {
             appSharedPrefs.edit()
+        }
+
+        fun putInt(key: String, value: Int) {
+            prefsEditor.putInt(key, value).apply()
+        }
+
+        fun putBoolean(key: String, value: Boolean) {
+            prefsEditor.putBoolean(key, value).apply()
         }
 
         fun builder(): BasePreference = BasePreference(this)
