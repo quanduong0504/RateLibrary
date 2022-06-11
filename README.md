@@ -17,13 +17,13 @@ Base Module Tutorial:
     - false: phải gọi vào view 1 func để load banner ads
 2. PurchaseView
 
-  <com.mmgsoft.modules.libs.widgets.PurchaseView
-        android:id="@+id/purchaseView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#BFBFBF"
-        app:pv_layoutManager="list"
-        app:pv_orientation="vertical" />
+        <com.mmgsoft.modules.libs.widgets.PurchaseView
+          android:id="@+id/purchaseView"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="#BFBFBF"
+          app:pv_layoutManager="list"
+          app:pv_orientation="vertical" />
 
   - pv_layoutManager (list/grid)
   - pv_orientation (vertical/horizontal)
